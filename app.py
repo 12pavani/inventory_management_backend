@@ -4,6 +4,7 @@ from models import (  # corrected import path
     supplier_pydantic, supplier_pydanticIn, Supplier,
     product_pydantic, product_pydanticIn, Product
 )
+import os
 
 # Email
 from typing import List
@@ -11,10 +12,10 @@ from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 from pydantic import BaseModel, EmailStr
 
 # dotenv for credentials
-from dotenv import dotenv_values
+# from dotenv import dotenv_values
 
 # Load credentials from .env
-credentials = dotenv_values(".env")
+# credentials = dotenv_values(".env")
 
 # CORS middleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -137,9 +138,9 @@ class EmailContent(BaseModel):
 
 # Email configuration
 conf = ConnectionConfig(
-    MAIL_USERNAME=credentials['EMAIL'],
-    MAIL_PASSWORD=credentials['PASS'],
-    MAIL_FROM=credentials['EMAIL'],
+    MAIL_USERNAME=os.environ.get['EMAIL'],
+    MAIL_PASSWORD=os.environ.get['PASS'],
+    MAIL_FROM=os.environ.get['EMAIL'],
     MAIL_PORT=465,
     MAIL_SERVER="smtp.gmail.com",
     MAIL_STARTTLS=False,
