@@ -185,7 +185,7 @@ async def send_email(product_id: int, content: EmailContent):
 register_tortoise(
     app,
     # db_url = "postgres://postgres:pavani@localhost:5434/database",
-    db_url = "postgres://inventory_management_backend_user:hf0dSEiR2Py6czF47xnuY6QWy08BMhZE@dpg-csbomi5ds78s73bc38h0-a:5432/database",
+    db_url = "postgres://inventory_management_backend_user:hf0dSEiR2Py6czF47xnuY6QWy08BMhZE@dpg-csbomi5ds78s73bc38h0-a:5432/inventory_management_backend",
     modules={"models": ["models"]},  
     generate_schemas=True,
     add_exception_handlers=True
