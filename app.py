@@ -138,9 +138,9 @@ class EmailContent(BaseModel):
 
 # Email configuration
 conf = ConnectionConfig(
-    MAIL_USERNAME=os.environ.get['EMAIL'],
-    MAIL_PASSWORD=os.environ.get['PASS'],
-    MAIL_FROM=os.environ.get['EMAIL'],
+    MAIL_USERNAME=os.environ.get('EMAIL'),
+    MAIL_PASSWORD=os.environ.get('PASS'),
+    MAIL_FROM=os.environ.get('EMAIL'),
     MAIL_PORT=465,
     MAIL_SERVER="smtp.gmail.com",
     MAIL_STARTTLS=False,
