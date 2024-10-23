@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from tortoise.contrib.fastapi import register_tortoise
-from models import (  # corrected import path
+from models import (  
     supplier_pydantic, supplier_pydanticIn, Supplier,
     product_pydantic, product_pydanticIn, Product
 )
@@ -22,14 +22,27 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# CORS configuration
+origins = [
+    "https://inventory-management-frontend-5bio.onrender.com"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# CORS configuration
+# app.add_middleware(
+#     CORSMiddleware,
+#     # allow_origins=["http://localhost:3000"],
+#     allow_origins=["http://192.168.146.238:3000"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 @app.get('/')
 def index():
@@ -112,15 +125,19 @@ async def update_product(id: int, update_info: product_pydanticIn):
         raise HTTPException(status_code=404, detail="Product not found")
     
     update_data = update_info.dict(exclude_unset=True)
+
+    # Update fields
     product.name = update_data.get('name', product.name)
     product.quantity_in_stock = update_data.get('quantity_in_stock', product.quantity_in_stock)
-    product.revenue += (update_data['quantity_sold'] * update_data['unit_price']) + update_data.get('revenue', 0)
-    product.quantity_sold += update_data.get('quantity_sold', 0)
-    product.unit_price = update_data.get('unit_price', product.unit_price)
-    
+    if 'quantity_sold' in update_data and 'unit_price' in update_data:
+        product.quantity_sold += update_data['quantity_sold']
+        product.unit_price = update_data['unit_price']
+        product.revenue += (update_data['quantity_sold'] * update_data['unit_price'])
+
     await product.save()
     response = await product_pydantic.from_tortoise_orm(product)
     return {"status": "ok", "data": response}
+
 
 @app.delete('/product/{id}')
 async def delete_product(id: int):
