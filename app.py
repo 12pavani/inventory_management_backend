@@ -23,7 +23,11 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
-    "https://inventory-management-frontend-5bio.onrender.com"
+    "https://inventory-management-frontend-5bio.onrender.com",
+    "https://inventory-management-backend-ppyt.onrender.com",
+    # Include local development URLs if needed
+    "http://localhost:3000",
+    "http://localhost:5173"
 ]
 
 app.add_middleware(
@@ -32,7 +36,21 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600,
 )
+
+# origins = [
+#     "https://inventory-management-frontend-5bio.onrender.com"
+# ]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 
 # CORS configuration
